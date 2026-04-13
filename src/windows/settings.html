@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>タイマー設定</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", sans-serif; font-size: 12px; background: #1a1a1a; color: #eee; padding: 12px; }
+  h2 { font-size: 13px; margin-bottom: 10px; color: #4caf50; }
+  .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .row > label { min-width: 80px; font-weight: bold; }
+  .themes, .fonts { display: flex; gap: 4px; flex-wrap: wrap; }
+  .swatch {
+    width: 32px; height: 26px; border-radius: 4px;
+    cursor: pointer; border: 2px solid #444;
+    font-size: 10px; display: flex; align-items: center; justify-content: center;
+    font-weight: bold;
+  }
+  .swatch.active { border-color: #4caf50; box-shadow: 0 0 0 1px #4caf50; }
+  .fontbtn {
+    padding: 4px 10px; height: 28px;
+    background: #2a2a2a; border: 2px solid #444;
+    color: #fff; cursor: pointer; border-radius: 4px;
+    font-size: 13px; font-weight: bold;
+  }
+  .fontbtn.active { border-color: #4caf50; }
+  input[type="color"] { width: 40px; height: 28px; border: 1px solid #444; background: none; cursor: pointer; padding: 0; }
+  .chk { cursor: pointer; display: flex; align-items: center; gap: 4px; }
+  .chk input { cursor: pointer; }
+  hr { border: none; border-top: 1px solid #333; margin: 10px 0; }
+  .preset {
+    background: #2a2a2a; border: 1px solid #444; color: #fff;
+    padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;
+  }
+  .preset:hover { background: #3a3a3a; }
+</style>
+</head>
+<body>
+  <h2>テーマ</h2>
+  <div class="row"><div class="themes" id="themeList"></div></div>
+
+  <hr>
+  <h2>色のカスタマイズ</h2>
+  <div class="row"><label>背景色</label><input type="color" id="bgColor"></div>
+  <div class="row"><label>文字色</label><input type="color" id="fgColor"></div>
+  <div class="row"><label>残り1分の数字色</label><input type="color" id="warnColor"></div>
+  <div class="row"><label>終了色</label><input type="color" id="endColor"></div>
+
+  <hr>
+  <div class="row">
+    <label class="chk"><input type="checkbox" id="transparentMode"> 背景透過モード</label>
+  </div>
+
+  <script src="settings.js"></script>
+</body>
+</html>

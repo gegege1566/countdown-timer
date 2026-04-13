@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Countdown Timer</title>
+<link rel="stylesheet" href="timer.css">
+</head>
+<body class="theme-dark font-segoe">
+  <div id="app">
+    <div class="main">
+      <div class="time-wrap" id="timeWrap">
+        <div class="time" id="time" title="ドラッグで移動／ダブルクリックで時間変更">
+          <span class="overtime-mark">+</span><span class="seg" id="segMin">00</span><span class="colon">:</span><span class="seg" id="segSec">00</span>
+        </div>
+
+        <div class="editor" id="editor" hidden>
+          <div class="col">
+            <button class="spin up" data-target="min" data-dir="1">▲</button>
+            <input type="text" inputmode="numeric" maxlength="2" id="inMin" value="00">
+            <button class="spin down" data-target="min" data-dir="-1">▼</button>
+          </div>
+          <div class="ecolon">:</div>
+          <div class="col">
+            <button class="spin up" data-target="sec" data-dir="1">▲</button>
+            <input type="text" inputmode="numeric" maxlength="2" id="inSec" value="00">
+            <button class="spin down" data-target="sec" data-dir="-1">▼</button>
+          </div>
+          <button class="ok" id="editOk" title="保存">保存</button>
+        </div>
+      </div>
+
+      <div class="controls" id="controls">
+        <button class="btn play-btn" title="開始/一時停止" id="btnPlay"></button>
+        <button class="btn" title="リセット" id="btnReset">↺</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="resize-handle" data-dir="nw"></div>
+  <div class="resize-handle" data-dir="ne"></div>
+  <div class="resize-handle" data-dir="sw"></div>
+  <div class="resize-handle" data-dir="se"></div>
+
+  <div class="tab" id="tab">
+    <button class="tab-btn" title="テーマ切替（黒↔白）" id="btnTheme">◐</button>
+    <button class="tab-btn" title="背景透過の切替" id="btnTransparent">▢</button>
+    <button class="tab-btn close" title="閉じる" id="btnClose">✕</button>
+  </div>
+
+  <script src="timer.js"></script>
+</body>
+</html>
