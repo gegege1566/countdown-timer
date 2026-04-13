@@ -138,7 +138,7 @@ function openEditor() {
 
 function closeEditor() {
   const m = clamp(parseInt(inMin.value, 10) || 0, 0, 99);
-  const s = clamp(parseInt(inSec.value, 10) || 0, 0, 99);
+  const s = clamp(parseInt(inSec.value, 10) || 0, 0, 59);
   state.totalMs = (m * 60 + s) * 1000;
   state.remainingMs = state.totalMs;
   state.ended = false;
@@ -194,12 +194,14 @@ document.querySelectorAll('.spin').forEach(b => {
   b.addEventListener('click', () => {
     const t = b.dataset.target, dir = parseInt(b.dataset.dir, 10);
     const inp = t === 'min' ? inMin : inSec;
-    const v = clamp((parseInt(inp.value, 10) || 0) + dir, 0, 99);
+    const max = t === 'min' ? 99 : 59;
+    const v = clamp((parseInt(inp.value, 10) || 0) + dir, 0, max);
     inp.value = String(v).padStart(2, '0');
   });
 });
 
 [inMin, inSec].forEach(inp => {
+  const max = inp === inMin ? 99 : 59;
   inp.addEventListener('input', () => {
     inp.value = inp.value.replace(/\D/g, '').slice(0, 2);
   });
@@ -209,7 +211,7 @@ document.querySelectorAll('.spin').forEach(b => {
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault();
       const dir = e.key === 'ArrowUp' ? 1 : -1;
-      const v = clamp((parseInt(inp.value, 10) || 0) + dir, 0, 99);
+      const v = clamp((parseInt(inp.value, 10) || 0) + dir, 0, max);
       inp.value = String(v).padStart(2, '0');
     }
   });
@@ -251,11 +253,6 @@ function applySettings() {
 function saveSettings() {
   window.api.setConfig({ settings });
 }
-
-window.api.onSettingsUpdate((s) => {
-  Object.assign(settings, s);
-  applySettings();
-});
 
 (async () => {
   const cfg = await window.api.getConfig();

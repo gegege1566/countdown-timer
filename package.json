@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --win",
+    "build": "electron-builder --win --publish never",
     "build:dir": "electron-builder --win --dir"
   },
   "build": {
@@ -15,8 +15,7 @@
     "productName": "Countdown Timer",
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        "nsis"
       ],
       "icon": "build/icon.ico"
     },

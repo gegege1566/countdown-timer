@@ -3,7 +3,6 @@ const path = require('path');
 const fs = require('fs');
 
 let win = null;
-let settingsWin = null;
 let isRunning = false;
 
 function getConfigPath() {
@@ -79,46 +78,6 @@ function createWindow() {
   win.on('move', persist);
 }
 
-function createSettingsWindow() {
-  if (settingsWin && !settingsWin.isDestroyed()) {
-    settingsWin.focus();
-    return;
-  }
-  const W = 360, H = 320;
-  let x, y;
-  if (win && !win.isDestroyed()) {
-    const [tx, ty] = win.getPosition();
-    const [tw, th] = win.getSize();
-    x = tx;
-    y = ty + th + 4;
-    const { screen } = require('electron');
-    const display = screen.getDisplayNearestPoint({ x: tx, y: ty });
-    const wa = display.workArea;
-    if (y + H > wa.y + wa.height) y = Math.max(wa.y, ty - H - 4);
-    if (x + W > wa.x + wa.width) x = wa.x + wa.width - W;
-    if (x < wa.x) x = wa.x;
-  }
-  settingsWin = new BrowserWindow({
-    width: W,
-    height: H,
-    x, y,
-    resizable: true,
-    minimizable: false,
-    maximizable: false,
-    alwaysOnTop: true,
-    parent: win,
-    title: 'タイマー設定',
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
-      nodeIntegration: false,
-    },
-  });
-  settingsWin.setMenuBarVisibility(false);
-  settingsWin.loadFile(path.join(__dirname, 'src', 'windows', 'settings.html'));
-  settingsWin.on('closed', () => { settingsWin = null; });
-}
-
 ipcMain.handle('window:close', () => { if (win) win.close(); });
 
 ipcMain.on('window:move-by', (_e, dx, dy) => {
@@ -155,19 +114,6 @@ ipcMain.handle('window:resize', (_e, w, h) => {
 });
 
 ipcMain.handle('window:get-size', () => win ? win.getSize() : [0, 0]);
-
-ipcMain.handle('settings:open', () => createSettingsWindow());
-
-ipcMain.handle('settings:apply', (_e, settings) => {
-  if (win && !win.isDestroyed()) {
-    win.webContents.send('settings:update', settings);
-  }
-});
-
-ipcMain.handle('settings:get', async () => {
-  if (!win || win.isDestroyed()) return null;
-  return await win.webContents.executeJavaScript('JSON.parse(localStorage.getItem("timer-settings") || "null")');
-});
 
 ipcMain.on('window:set-running', (_e, running) => { isRunning = !!running; });
 

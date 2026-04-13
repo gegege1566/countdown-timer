@@ -9,8 +9,4 @@ contextBridge.exposeInMainWorld('api', {
   setRunning: (running) => ipcRenderer.send('window:set-running', running),
   getConfig: () => ipcRenderer.invoke('config:get'),
   setConfig: (patch) => ipcRenderer.invoke('config:set', patch),
-  openSettings: () => ipcRenderer.invoke('settings:open'),
-  applySettings: (s) => ipcRenderer.invoke('settings:apply', s),
-  getSettings: () => ipcRenderer.invoke('settings:get'),
-  onSettingsUpdate: (cb) => ipcRenderer.on('settings:update', (_e, s) => cb(s)),
 });
