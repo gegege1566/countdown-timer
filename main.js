@@ -47,8 +47,8 @@ function createWindow() {
     height: config.height || 75,
     x: bounds.x,
     y: bounds.y,
-    minWidth: 80,
-    minHeight: 36,
+    minWidth: 60,
+    minHeight: 30,
     frame: false,
     transparent: true,
     resizable: true,
@@ -90,7 +90,7 @@ ipcMain.on('window:resize-from', (_e, dir, dx, dy) => {
   if (!win || win.isDestroyed()) return;
   const [x, y] = win.getPosition();
   const [w, h] = win.getSize();
-  const MIN_W = 80, MIN_H = 36;
+  const MIN_W = 60, MIN_H = 30;
   let nx = x, ny = y, nw = w, nh = h;
   if (dir.includes('e')) nw = Math.max(MIN_W, w + dx);
   if (dir.includes('w')) {
@@ -110,7 +110,7 @@ ipcMain.on('window:resize-from', (_e, dir, dx, dy) => {
 ipcMain.handle('window:resize', (_e, w, h) => {
   if (!win) return;
   const [x, y] = win.getPosition();
-  win.setBounds({ x, y, width: Math.max(80, Math.round(w)), height: Math.max(36, Math.round(h)) });
+  win.setBounds({ x, y, width: Math.max(60, Math.round(w)), height: Math.max(30, Math.round(h)) });
 });
 
 ipcMain.handle('window:get-size', () => win ? win.getSize() : [0, 0]);

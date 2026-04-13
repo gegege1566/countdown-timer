@@ -15,17 +15,20 @@
 
         <div class="editor" id="editor" hidden>
           <div class="col">
-            <button class="spin up" data-target="min" data-dir="1">▲</button>
             <input type="text" inputmode="numeric" maxlength="2" id="inMin" value="00">
-            <button class="spin down" data-target="min" data-dir="-1">▼</button>
+            <div class="spins">
+              <button class="spin up" data-target="min" data-dir="1">▲</button>
+              <button class="spin down" data-target="min" data-dir="-1">▼</button>
+            </div>
           </div>
-          <div class="ecolon">:</div>
           <div class="col">
-            <button class="spin up" data-target="sec" data-dir="1">▲</button>
             <input type="text" inputmode="numeric" maxlength="2" id="inSec" value="00">
-            <button class="spin down" data-target="sec" data-dir="-1">▼</button>
+            <div class="spins">
+              <button class="spin up" data-target="sec" data-dir="1">▲</button>
+              <button class="spin down" data-target="sec" data-dir="-1">▼</button>
+            </div>
           </div>
-          <button class="ok" id="editOk" title="保存">保存</button>
+          <button class="ok" id="editOk" title="保存">OK</button>
         </div>
       </div>
 
