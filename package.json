@@ -1,6 +1,6 @@
 {
   "name": "countdown-timer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Minimal always-on-top countdown timer for online presentations",
   "main": "main.js",
   "author": "",
