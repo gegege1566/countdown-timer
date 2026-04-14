@@ -33,11 +33,12 @@ body.transparent #app { border: none; }
   align-self: center;
   background: var(--bg, #111);
   color: var(--fg, #fff);
-  padding: 1px 12px 2px;
+  padding: 1px 8px 2px;
   border-radius: 0 0 12px 12px;
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: center;
   margin-top: -2px;
   z-index: 5;
   flex-shrink: 0;

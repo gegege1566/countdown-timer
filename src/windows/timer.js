@@ -126,7 +126,27 @@ function fitFont() {
   wrapEl.style.paddingLeft = Math.max(4, Math.round(0.22 * fontSize)) + 'px';
   wrapEl.style.paddingRight = cw + 'px';
 }
-new ResizeObserver(fitFont).observe(wrapEl);
+function fitTabAndCapsule() {
+  const tabEl = $('tab');
+  const appEl = $('app');
+  if (!tabEl || !appEl) return;
+  const w = window.innerWidth;
+  const h = appEl.offsetHeight;
+  const tabMinW = 80;
+  const tabMaxW = 240;
+  // Cap border-radius so capsule's bottom always has a straight portion ≥ tabMinW
+  const desiredR = Math.max(0, (w - tabMinW) / 2);
+  const maxR = Math.min(w, h) / 2;
+  const radius = Math.min(desiredR, maxR);
+  appEl.style.borderRadius = radius + 'px';
+  // Tab width = straight portion of capsule bottom, clamped
+  const straight = w - 2 * radius;
+  const tabW = Math.min(Math.max(straight, tabMinW), tabMaxW);
+  tabEl.style.width = Math.round(tabW) + 'px';
+}
+
+new ResizeObserver(() => { fitFont(); fitTabAndCapsule(); }).observe(wrapEl);
+new ResizeObserver(fitTabAndCapsule).observe(document.body);
 
 const editor = $('editor');
 const inMin = $('inMin');
