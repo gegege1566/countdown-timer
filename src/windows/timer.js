@@ -110,15 +110,21 @@ const wrapEl = $('timeWrap');
 function fitFont() {
   if (!wrapEl.clientWidth || !wrapEl.clientHeight) return;
   const controlsEl = $('controls');
-  const cw = controlsEl ? controlsEl.offsetWidth : 0;
-  const availW = Math.max(10, wrapEl.clientWidth - 2 * cw);
+  const cw = controlsEl ? controlsEl.offsetWidth + 10 : 0;
   timeEl.style.fontSize = '100px';
   const r = timeEl.getBoundingClientRect();
   if (!r.width || !r.height) return;
-  const sw = availW / r.width;
-  const sh = wrapEl.clientHeight / r.height;
-  const size = Math.max(8, Math.floor(100 * Math.min(sw, sh) * 0.96));
-  timeEl.style.fontSize = size + 'px';
+  // Asymmetric buffers:
+  //   left = overtime "+" width (~0.22em = 22px at ref 100)
+  //   right = controls width (cw)
+  // At scale S: content width = wrapWidth - 22*S - cw ≥ r.width * S
+  //   → S ≤ (wrapWidth - cw) / (r.width + 22)
+  const scaleW = (wrapEl.clientWidth - cw) / (r.width + 22);
+  const scaleH = wrapEl.clientHeight / r.height;
+  const fontSize = Math.max(8, Math.floor(100 * Math.min(scaleW, scaleH) * 0.96));
+  timeEl.style.fontSize = fontSize + 'px';
+  wrapEl.style.paddingLeft = Math.max(4, Math.round(0.22 * fontSize)) + 'px';
+  wrapEl.style.paddingRight = cw + 'px';
 }
 new ResizeObserver(fitFont).observe(wrapEl);
 

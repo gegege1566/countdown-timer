@@ -101,7 +101,7 @@ body.ended.blinking .time { animation: textBlink 0.12s infinite alternate; }
   color: var(--fg, #fff);
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
-  transform: translate(-0.2em, -0.05em);
+  transform: translateY(-0.05em);
 }
 body.ended .time { color: #ffeb3b; }
 body.transparent .time { text-shadow: 0 0 4px var(--bg, #000), 0 0 2px var(--bg, #000); }
