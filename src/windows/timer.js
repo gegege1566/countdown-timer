@@ -134,15 +134,29 @@ function fitTabAndCapsule() {
   const h = appEl.offsetHeight;
   const tabMinW = 80;
   const tabMaxW = 240;
-  // Cap border-radius so capsule's bottom always has a straight portion ≥ tabMinW
   const desiredR = Math.max(0, (w - tabMinW) / 2);
   const maxR = Math.min(w, h) / 2;
   const radius = Math.min(desiredR, maxR);
   appEl.style.borderRadius = radius + 'px';
-  // Tab width = straight portion of capsule bottom, clamped
   const straight = w - 2 * radius;
   const tabW = Math.min(Math.max(straight, tabMinW), tabMaxW);
   tabEl.style.width = Math.round(tabW) + 'px';
+  // Shift resize handles inward along the visible pill curve
+  const handleOffset = Math.round(radius * 0.3);
+  const handles = {
+    nw: { top: handleOffset, left: handleOffset },
+    ne: { top: handleOffset, right: handleOffset },
+    sw: { bottom: handleOffset, left: handleOffset },
+    se: { bottom: handleOffset, right: handleOffset },
+  };
+  Object.entries(handles).forEach(([dir, pos]) => {
+    const el = document.querySelector(`.resize-handle[data-dir="${dir}"]`);
+    if (!el) return;
+    el.style.top = pos.top !== undefined ? pos.top + 'px' : '';
+    el.style.bottom = pos.bottom !== undefined ? pos.bottom + 'px' : '';
+    el.style.left = pos.left !== undefined ? pos.left + 'px' : '';
+    el.style.right = pos.right !== undefined ? pos.right + 'px' : '';
+  });
 }
 
 new ResizeObserver(() => { fitFont(); fitTabAndCapsule(); }).observe(wrapEl);
