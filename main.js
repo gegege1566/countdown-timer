@@ -5,6 +5,7 @@ const fs = require('fs');
 let win = null;
 let isRunning = false;
 let isDragging = false;
+let dragStartSize = null;
 
 function getConfigPath() {
   return path.join(app.getPath('userData'), 'config.json');
@@ -84,11 +85,18 @@ ipcMain.handle('window:close', () => { if (win) win.close(); });
 ipcMain.on('window:move-by', (_e, dx, dy) => {
   if (!win || win.isDestroyed()) return;
   const [x, y] = win.getPosition();
-  const [w, h] = win.getSize();
+  const [w, h] = dragStartSize || win.getSize();
   win.setBounds({ x: Math.round(x + dx), y: Math.round(y + dy), width: w, height: h });
 });
 
-ipcMain.on('window:set-dragging', (_e, d) => { isDragging = !!d; });
+ipcMain.on('window:set-dragging', (_e, d) => {
+  isDragging = !!d;
+  if (isDragging && win && !win.isDestroyed()) {
+    dragStartSize = win.getSize();
+  } else {
+    dragStartSize = null;
+  }
+});
 
 ipcMain.on('window:force-size', (_e, w, h) => {
   if (!win || win.isDestroyed()) return;
