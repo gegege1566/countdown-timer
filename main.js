@@ -4,6 +4,7 @@ const fs = require('fs');
 
 let win = null;
 let isRunning = false;
+let isDragging = false;
 
 function getConfigPath() {
   return path.join(app.getPath('userData'), 'config.json');
@@ -67,7 +68,7 @@ function createWindow() {
   win.loadFile(path.join(__dirname, 'src', 'windows', 'timer.html'));
 
   const persist = () => {
-    if (isRunning) return;
+    if (isRunning || isDragging) return;
     if (!win || win.isDestroyed()) return;
     const [w, h] = win.getSize();
     const [x, y] = win.getPosition();
@@ -83,7 +84,16 @@ ipcMain.handle('window:close', () => { if (win) win.close(); });
 ipcMain.on('window:move-by', (_e, dx, dy) => {
   if (!win || win.isDestroyed()) return;
   const [x, y] = win.getPosition();
-  win.setPosition(Math.round(x + dx), Math.round(y + dy));
+  const [w, h] = win.getSize();
+  win.setBounds({ x: Math.round(x + dx), y: Math.round(y + dy), width: w, height: h });
+});
+
+ipcMain.on('window:set-dragging', (_e, d) => { isDragging = !!d; });
+
+ipcMain.on('window:force-size', (_e, w, h) => {
+  if (!win || win.isDestroyed()) return;
+  const [x, y] = win.getPosition();
+  win.setBounds({ x, y, width: Math.round(w), height: Math.round(h) });
 });
 
 ipcMain.on('window:resize-from', (_e, dir, dx, dy) => {

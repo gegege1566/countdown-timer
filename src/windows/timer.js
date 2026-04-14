@@ -191,9 +191,11 @@ function closeEditor() {
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
 
 let drag = null;
-timeEl.addEventListener('mousedown', (e) => {
+timeEl.addEventListener('mousedown', async (e) => {
   if (e.button !== 0) return;
-  drag = { sx: e.screenX, sy: e.screenY, moved: false };
+  const origSize = await window.api.getWindowSize();
+  drag = { sx: e.screenX, sy: e.screenY, moved: false, origSize };
+  window.api.setDragging(true);
   e.preventDefault();
 });
 window.addEventListener('mousemove', (e) => {
@@ -207,7 +209,14 @@ window.addEventListener('mousemove', (e) => {
     drag.sy = e.screenY;
   }
 });
-window.addEventListener('mouseup', () => { drag = null; });
+window.addEventListener('mouseup', () => {
+  if (drag && drag.moved && drag.origSize) {
+    const [ow, oh] = drag.origSize;
+    window.api.forceSize(ow, oh);
+  }
+  if (drag) window.api.setDragging(false);
+  drag = null;
+});
 
 let resizeState = null;
 document.querySelectorAll('.resize-handle').forEach(handle => {
