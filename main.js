@@ -6,6 +6,7 @@ let win = null;
 let isRunning = false;
 let isDragging = false;
 let dragStartSize = null;
+let runningTabDelta = 0;
 
 function getConfigPath() {
   return path.join(app.getPath('userData'), 'config.json');
@@ -133,7 +134,26 @@ ipcMain.handle('window:resize', (_e, w, h) => {
 
 ipcMain.handle('window:get-size', () => win ? win.getSize() : [0, 0]);
 
-ipcMain.on('window:set-running', (_e, running) => { isRunning = !!running; });
+ipcMain.on('window:set-running', (_e, running, tabSpace) => {
+  isRunning = !!running;
+  if (!win || win.isDestroyed()) return;
+  if (running) {
+    if (runningTabDelta !== 0) return;
+    const delta = Math.round(Number(tabSpace) || 0);
+    if (delta <= 0) return;
+    const [w, h] = win.getSize();
+    const [x, y] = win.getPosition();
+    runningTabDelta = delta;
+    win.setBounds({ x, y, width: w, height: Math.max(30, h - delta) });
+  } else {
+    if (runningTabDelta === 0) return;
+    const [w, h] = win.getSize();
+    const [x, y] = win.getPosition();
+    const delta = runningTabDelta;
+    runningTabDelta = 0;
+    win.setBounds({ x, y, width: w, height: h + delta });
+  }
+});
 
 ipcMain.handle('config:get', () => config);
 ipcMain.handle('config:set', (_e, patch) => {

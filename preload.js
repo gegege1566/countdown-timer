@@ -8,7 +8,7 @@ contextBridge.exposeInMainWorld('api', {
   setDragging: (d) => ipcRenderer.send('window:set-dragging', d),
   forceSize: (w, h) => ipcRenderer.send('window:force-size', w, h),
   resizeFrom: (dir, dx, dy) => ipcRenderer.send('window:resize-from', dir, dx, dy),
-  setRunning: (running) => ipcRenderer.send('window:set-running', running),
+  setRunning: (running, tabSpace) => ipcRenderer.send('window:set-running', running, tabSpace),
   getConfig: () => ipcRenderer.invoke('config:get'),
   setConfig: (patch) => ipcRenderer.invoke('config:set', patch),
 });

@@ -64,35 +64,21 @@ function getTabSpace() {
   return tab.offsetHeight + parseFloat(cs.marginTop || 0) + parseFloat(cs.marginBottom || 0);
 }
 
-async function resizeWindowBy(dh) {
-  if (!dh) return;
-  const [w, h] = await window.api.getWindowSize();
-  await window.api.resizeWindow(w, h + dh);
-}
-
 function start() {
   if (state.running) return;
   if (state.totalMs <= 0 && !state.ended) return;
   const tabSpace = getTabSpace();
-  state.savedTabSpace = tabSpace;
   state.running = true;
-  window.api.setRunning(true);
+  window.api.setRunning(true, tabSpace);
   state.lastTick = performance.now();
   state.raf = requestAnimationFrame(tick);
   render();
-  if (tabSpace > 0) resizeWindowBy(-tabSpace);
 }
 
 function pause() {
   if (state.raf) cancelAnimationFrame(state.raf);
-  const wasRunning = state.running;
   state.running = false;
   render();
-  if (wasRunning && state.savedTabSpace > 0) {
-    const space = state.savedTabSpace;
-    state.savedTabSpace = 0;
-    resizeWindowBy(space);
-  }
   window.api.setRunning(false);
 }
 
